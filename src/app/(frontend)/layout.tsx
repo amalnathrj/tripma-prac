@@ -1,9 +1,12 @@
 import React from 'react'
 import './styles.css'
+import '../global.css'
+import GoogleAuthProvider from './providers/GoogleAuthProvider'
 
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  description: 'Book your next adventure with Tripma. The best deals on flights, hotels and stays.',
+  title: 'Tripma - Flight Booking & Travel',
+  keywords: 'flights, travel, booking, hotels, tripma, cheap flights',
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
@@ -12,7 +15,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <GoogleAuthProvider>
+          <main>{children}</main>
+        </GoogleAuthProvider>
       </body>
     </html>
   )

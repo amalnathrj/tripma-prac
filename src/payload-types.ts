@@ -69,6 +69,13 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    bookings: Booking;
+    flights: Flight;
+    stays: Stay;
+    flightDeals: FlightDeal;
+    testimonials: Testimonial;
+    seats: Seat;
+    payments: Payment;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +85,13 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
+    flights: FlightsSelect<false> | FlightsSelect<true>;
+    stays: StaysSelect<false> | StaysSelect<true>;
+    flightDeals: FlightDealsSelect<false> | FlightDealsSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    seats: SeatsSelect<false> | SeatsSelect<true>;
+    payments: PaymentsSelect<false> | PaymentsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -123,6 +137,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  role: 'admin' | 'user';
+  name?: string | null;
+  googleId?: string | null;
+  picture?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -163,6 +181,112 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: string;
+  user: string | User;
+  flight: string | Flight;
+  seat: string | Seat;
+  payment: string | Payment;
+  status?: ('pending' | 'confirmed' | 'cancelled') | null;
+  passengerName?: string | null;
+  seatNumber?: string | null;
+  totalAmount?: number | null;
+  chosenDate?: string | null;
+  from?: string | null;
+  to?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "flights".
+ */
+export interface Flight {
+  id: string;
+  airline: string;
+  flightNo: string;
+  duration: string;
+  time: string;
+  stops: string;
+  stopDetail?: string | null;
+  price: number;
+  flag?: string | null;
+  logo?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seats".
+ */
+export interface Seat {
+  id: string;
+  user: string | User;
+  seatNumber: string;
+  flight: string | Flight;
+  passengerName: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments".
+ */
+export interface Payment {
+  id: string;
+  user: string | User;
+  amount: number;
+  method: string;
+  status?: ('success' | 'failed' | 'pending') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stays".
+ */
+export interface Stay {
+  id: string;
+  title: string;
+  description?: string | null;
+  src: string;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "flightDeals".
+ */
+export interface FlightDeal {
+  id: string;
+  title: string;
+  place: string;
+  price: string;
+  desc?: string | null;
+  img: string;
+  isBigCard?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: string;
+  name: string;
+  location?: string | null;
+  text: string;
+  img?: string | null;
+  rating?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -192,6 +316,34 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: string | Booking;
+      } | null)
+    | ({
+        relationTo: 'flights';
+        value: string | Flight;
+      } | null)
+    | ({
+        relationTo: 'stays';
+        value: string | Stay;
+      } | null)
+    | ({
+        relationTo: 'flightDeals';
+        value: string | FlightDeal;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: string | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'seats';
+        value: string | Seat;
+      } | null)
+    | ({
+        relationTo: 'payments';
+        value: string | Payment;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -240,6 +392,10 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
+  name?: T;
+  googleId?: T;
+  picture?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -274,6 +430,105 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  user?: T;
+  flight?: T;
+  seat?: T;
+  payment?: T;
+  status?: T;
+  passengerName?: T;
+  seatNumber?: T;
+  totalAmount?: T;
+  chosenDate?: T;
+  from?: T;
+  to?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "flights_select".
+ */
+export interface FlightsSelect<T extends boolean = true> {
+  airline?: T;
+  flightNo?: T;
+  duration?: T;
+  time?: T;
+  stops?: T;
+  stopDetail?: T;
+  price?: T;
+  flag?: T;
+  logo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stays_select".
+ */
+export interface StaysSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  src?: T;
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "flightDeals_select".
+ */
+export interface FlightDealsSelect<T extends boolean = true> {
+  title?: T;
+  place?: T;
+  price?: T;
+  desc?: T;
+  img?: T;
+  isBigCard?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  name?: T;
+  location?: T;
+  text?: T;
+  img?: T;
+  rating?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seats_select".
+ */
+export interface SeatsSelect<T extends boolean = true> {
+  user?: T;
+  seatNumber?: T;
+  flight?: T;
+  passengerName?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments_select".
+ */
+export interface PaymentsSelect<T extends boolean = true> {
+  user?: T;
+  amount?: T;
+  method?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
