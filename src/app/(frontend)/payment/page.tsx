@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Footer from '../components/Footer'
 import { FcGoogle } from 'react-icons/fc'
@@ -19,7 +19,7 @@ const InfoIcon = () => (
   </svg>
 )
 
-export default function Payment() {
+function PaymentContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const flightIdsString = searchParams.get('flights') || ''
@@ -500,5 +500,13 @@ export default function Payment() {
         <Footer />
       </div>
     </div>
+  )
+}
+
+export default function Payment() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>}>
+      <PaymentContent />
+    </Suspense>
   )
 }

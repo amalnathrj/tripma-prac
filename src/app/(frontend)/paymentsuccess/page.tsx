@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 
 
 
-export default function SuccessContent() {
+function SuccessContentInner() {
   const searchParams = useSearchParams()
   const flightIds = searchParams.get('flights')?.split(',') || []
   const passengerName = searchParams.get('p1') || 'Guest'
@@ -361,5 +361,13 @@ export default function SuccessContent() {
 
 
     </div>
-      )
+  )
+}
+
+export default function SuccessContent() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>}>
+      <SuccessContentInner />
+    </Suspense>
+  )
 }

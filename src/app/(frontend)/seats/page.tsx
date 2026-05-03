@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
-export default function SeatsPage() {
+function SeatsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -214,5 +214,13 @@ export default function SeatsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SeatsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center">Loading...</div>}>
+      <SeatsPageContent />
+    </Suspense>
   );
 }
